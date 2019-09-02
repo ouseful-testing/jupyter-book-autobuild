@@ -1,43 +1,22 @@
 version: 2.1
 jobs:
+  #Based in part on: https://github.com/ds-102/ds-102-book/blob/master/.circleci/config.yml
   demo_html:
     docker:
       - image: circleci/ruby:2.6
     steps:
-      # Attach the built markdown files
       - checkout
-      #- attach_workspace:
-          # Must be absolute path or relative path from working_directory
-      #    at: /tmp/workspace
 
-      # Copy over the built markdown files
-      #- copy_built_files
-
-      # Build the site's HTML w/ the base_url for CircleCI artifacts
       - run: gem install bundler
       - run: bundle install
       - run: bundle exec jekyll build --baseurl /0/html/
-
-      # Tell Circle to store the documentation output in a folder we can access later
-      - store_artifacts:
-          path: _site/
-          destination: html
-
-      - store_artifacts:
-          path: _build/
-          destination: _build
 
   # Push the HTML to the gh-pages branch
   push_html:
     docker:
       - image: circleci/ruby:2.6
     steps:
-      # Attach the built markdown files
       - checkout
-      #- attach_workspace:
-          # Must be absolute path or relative path from working_directory
-      #    at: /tmp/workspace
-
       # Install the ghp-import tool
       - run:
           name: "Install ghp-import"
@@ -46,16 +25,14 @@ jobs:
             curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
             python get-pip.py --user
             pip install -U ghp-import --user
-      # Copy over the built markdown files
-      #- copy_built_files
-      #- run: git checkout -b jupyterbook
-      # Build the site's HTML w/ the base_url for CircleCI artifacts
+
       - run: gem install bundler
       - run: bundle install
       - run: bundle exec jekyll build
 
       #This will prevent CircleCI trying to build on gh-pages - is there a better way?
       - run: cp -r ./.circleci ./_site
+
       # Push the `_site` folder to our gh-pages branch
       # The _site folder contains cruft? eg content/ dir?
       - run:
@@ -88,32 +65,13 @@ jobs:
           command: |
             . env/bin/activate
             
-            #git checkout -b jupyterbook
-            #rm -rf buildbook
-            
             jupyter-book create --content-folder content --config _config.yml --overwrite buildbook
-
-            #rm -rf buildbook/content
-            #cp -R content buildbook
-            #cp _config.yml buildbook/
             
             jupyter-book toc buildbook
             jupyter-book build buildbook/
             
             cp -r ./.circleci ./buildbook
-            #git add buildbook/*
-            
-            #git config --global user.email "jupyterbookbot@example.com"
-            #git config --global user.name "jupyterbookbot"
-            #git commit -m "Autobuild..." && \
-            #  git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/ouseful-testing/jupyter-book-autobuild.git jupyterbook \
-            #  || true
             ghp-import -p -n -f -r https://${GITHUB_PERSONAL_TOKEN}@github.com/ouseful-testing/jupyter-book-autobuild.git -b jupyterbook buildbook
-      # Persist the specified paths (see https://circleci.com/docs/2.0/workflows/#using-workspaces-to-share-data-among-jobs)
-      - persist_to_workspace:
-          root: ./buildbook/
-          paths:
-            - ./_build/
 workflows:
   version: 2
   build:
@@ -135,13 +93,3 @@ workflows:
             branches:
               only:
                 - jupyterbook          
-commands:
-  copy_built_files:
-    description: "Copy the build site files so we can build the HTML"
-    steps:
-      # Grab the the built markdown from the last step
-      - run:
-          name: Copy over built site files
-          command: |
-            rm -rf _build
-            cp -r /tmp/workspace/_build .

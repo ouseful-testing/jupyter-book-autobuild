@@ -31,7 +31,7 @@ In CircleCI:
 When you commit to the `master` branch of your repo:
 
 - `jupyter book` will generate a table of contents (TOC) file from the contents of the `content` folder;
-- `jupyter book` will use the generated TOC file ans the contents of the `content` directory to generate a set of Sphinx source files using settings in the `_config.yml` file;
-- the generated Sphinx documentation source fileswill be pushed into a `jupyterbook` branch of your repo;
-- Sphinx will run over the contents of the `jupyterbook` branch and a Sphinx documentation site built into the `gh-pages` branch;
+- `jupyter book` will use the generated TOC file ans the contents of the `content` directory to generate a set of Jekyll source files using settings in the `_config.yml` file;
+- the generated Jekyll documentation source fileswill be pushed into a `jupyterbook` branch of your repo;
+- Jekyll will run over the contents of the `jupyterbook` branch and a Jekyll documentation site built into the `gh-pages` branch;
 - your documentation site should then be viewable at: `YOUR_GITHUB_USERNAME.github.io/YOUR_REPO`

@@ -67,6 +67,7 @@ jobs:
             
             jupyter-book build buildbook/
             
+            command: echo $CIRCLE_REPOSITORY_URL $CIRCLE_USERNAME ${CIRCLE_BRANCH} $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME
             cp -r ./.circleci ./buildbook
             ghp-import -p -n -f -r https://${GITHUB_PERSONAL_TOKEN}@github.com/ouseful-testing/jupyter-book-autobuild.git -b jupyterbook buildbook
 workflows:

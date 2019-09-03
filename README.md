@@ -7,7 +7,6 @@ Create an account on CircleCI by logging in using Github authentication.
 With this repo:
 
 - generate your own repo from this template repo;
-- edit the `master` branch `.circleci/config.yml`: in the two locations where the `ghp-import` command is issued, change the `https://${GITHUB_PERSONAL_TOKEN}@github.com/ouseful-testing/jupyter-book-autobuild` line to `https://${GITHUB_PERSONAL_TOKEN}@github.com/YOUR_GITHUB_USERNAME/YOUR_REPO`; [TO DO: can we autodetect these and insert them automatically? Or perhaps set them via additional environment variables?]
 - place source files — markdown or Jupyter .ipynb documents — in the `content` directory;
 - optionally, place a table of contents file, `toc.yml`, at the top level of the repo;
 - change the `_config.yml` file so that the `url:` and `baseurl:` settings point to your repo on Github pages:

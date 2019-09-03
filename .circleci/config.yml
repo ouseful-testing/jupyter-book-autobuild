@@ -29,7 +29,7 @@ jobs:
           name: Push site to gh-pages
           command: |
             export PATH=$PATH:/home/circleci/.local/bin
-            ghp-import -p -n -f -r https://${GITHUB_PERSONAL_TOKEN}@github.com/ouseful-testing/jupyter-book-autobuild.git _site
+            ghp-import -p -n -f -r https://${GITHUB_PERSONAL_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git _site
   fetch_and_commit:
     docker:
       - image: circleci/python:3.6.4
@@ -67,10 +67,10 @@ jobs:
             
             jupyter-book build buildbook/
             
-            echo $CIRCLE_REPOSITORY_URL $CIRCLE_USERNAME ${CIRCLE_BRANCH} $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME
+            #echo $CIRCLE_REPOSITORY_URL $CIRCLE_USERNAME ${CIRCLE_BRANCH} ${CIRCLE_PROJECT_USERNAME} ${CIRCLE_PROJECT_REPONAME}
             
             cp -r ./.circleci ./buildbook
-            ghp-import -p -n -f -r https://${GITHUB_PERSONAL_TOKEN}@github.com/ouseful-testing/jupyter-book-autobuild.git -b jupyterbook buildbook
+            ghp-import -p -n -f -r https://${GITHUB_PERSONAL_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git -b jupyterbook buildbook
 workflows:
   version: 2
   build:

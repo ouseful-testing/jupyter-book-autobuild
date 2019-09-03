@@ -6,7 +6,8 @@ Create an account on CircleCI by logging in using Github authentication.
 
 With this repo:
 
-- generate your own repo from this template repo.
+- generate your own repo from this template repo;
+- edit the `master` branch `.circleci/config.yml`: in the two locations where the `ghp-import` command is issued, change the `https://${GITHUB_PERSONAL_TOKEN}@github.com/ouseful-testing/jupyter-book-autobuild` line to `https://${GITHUB_PERSONAL_TOKEN}@github.com/YOUR_GITHUB_USERNAME/YOUR_REPO`; [TO DO: can we autodetect these and insert them automatically? Or perhaps set them via additional environment variables?]
 - place source files — markdown or Jupyter .ipynb documents — in the `content` directory;
 - change the `_config.yml` file so that the `url:` and `baseurl:` settings point to your repo on Github pages:
 
@@ -27,4 +28,10 @@ In CircleCI:
 
 - select the project associated with your repo, go to the settings (cog icon), select *Build Settings > Environment Variables*, and create an environment variable `GITHUB_PERSONAL_TOKEN` using the Github Personal Access Token you just created.
 
-When you commit to the `master` branch of your repo, `jupyter book` will generate a table of contents file from the contents of the `content` folder and generate a set of Sphinx source files using settings in the `_config.yml` file, putting the created files into a `jupyterbook` branch of your repo; Sphinx will then be run over the contents of the `jupyterbook` branch and a Sphinx documentation site built into the `gh-pages` branch. Your documentation site should then be viewable at: `YOUR_GITHUB_USERNAME.github.io/YOUR_REPO`
+When you commit to the `master` branch of your repo:
+
+- `jupyter book` will generate a table of contents (TOC) file from the contents of the `content` folder;
+- `jupyter book` will use the generated TOC file ans the contents of the `content` directory to generate a set of Sphinx source files using settings in the `_config.yml` file;
+- the generated Sphinx documentation source fileswill be pushed into a `jupyterbook` branch of your repo;
+- Sphinx will run over the contents of the `jupyterbook` branch and a Sphinx documentation site built into the `gh-pages` branch;
+- your documentation site should then be viewable at: `YOUR_GITHUB_USERNAME.github.io/YOUR_REPO`

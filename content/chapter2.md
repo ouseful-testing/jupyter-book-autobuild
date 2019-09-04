@@ -17,6 +17,8 @@ jupyter:
 
 Some text
 
-```
+```python
 print('Hello world')
 ```
+
+More text

@@ -55,7 +55,8 @@ jobs:
           command: |
             . env/bin/activate
             
-            jupyter-book create --content-folder content --config _config.yml --overwrite buildbook
+            #jupyter-book create --content-folder content --config _config.yml --overwrite buildbook
+            jupyter-book create --content-folder content --config _config.yml buildbook
             
             #If a table of contents file exists, use it
             if [ -f "toc.yml" ]

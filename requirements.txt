@@ -1,1 +1,2 @@
-jupyter-book
+#jupyter-book
+git+https://github.com/jupyter/jupyter-book.git

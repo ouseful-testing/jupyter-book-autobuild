@@ -57,6 +57,9 @@ jobs:
             
             jupyter-book create --content-folder content --config _config.yml --overwrite buildbook
             
+            rm -rf ./buildbook/_site/*
+            rm -rf ./buildbook/_bibliography/*
+
             #If a table of contents file exists, use it
             if [ -f "toc.yml" ]
               then
@@ -65,7 +68,8 @@ jobs:
                 jupyter-book toc buildbook
             fi
             
-            jupyter-book build buildbook/
+            #Perhaps provide a config setting to allow execution or not?
+            jupyter-book build --execute --overwrite buildbook/ 
             
             #echo $CIRCLE_REPOSITORY_URL $CIRCLE_USERNAME ${CIRCLE_BRANCH} ${CIRCLE_PROJECT_USERNAME} ${CIRCLE_PROJECT_REPONAME}
             

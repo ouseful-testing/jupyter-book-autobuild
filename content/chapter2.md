@@ -21,4 +21,4 @@ Some text
 print('Hello world')
 ```
 
-More text
+More text.

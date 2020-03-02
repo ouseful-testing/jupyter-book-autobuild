@@ -1,0 +1,76 @@
+name: Jupyter Book Publish
+# via https://github.com/atrisovic/weather-panel.github.io/blob/master/.github/workflows/pythonpackage.yml#L10
+on:
+  push:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        sudo apt-get install python3-pip
+    - name: Build Jupyter Book 
+      run: |
+        pip install jupyter-book
+        PATH="${PATH}:${HOME}/.local/bin"
+        ls -ls
+        # jupyter-book build .
+        jupyter-book create --content-folder content --config _config.yml --overwrite buildbook
+            
+        rm -rf ./buildbook/_site/*
+        rm -rf ./buildbook/_bibliography/*
+        #If a table of contents file exists, use it
+        if [ -f "toc.yml" ]
+          then
+            cp toc.yml buildbook/_data
+          else
+            jupyter-book toc buildbook
+        fi
+        
+        #Perhaps provide a config setting to allow execution or not?
+        jupyter-book build --execute --overwrite buildbook
+ 
+    - name: Jupyter Buildbook
+      run: |
+        sudo chown -R $(whoami):$(whoami) .
+        git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+        git config --global user.name "$GITHUB_ACTOR"
+        #cp -r _site /tmp
+        #rm -rf *
+        #mv /tmp/_site/* .
+    - name: Install Ruby dependencies	
+      run: |	
+        cd buildbook 
+        sudo gem install bundler -v 1.17.2	
+        bundle install	
+        bundle exec jekyll build
+        cp -r _site /tmp
+        
+    - name: Push build branch	jupyterbook
+      run: |       
+        git checkout -b jupyterbook
+        git add --all --force buildbook
+        git commit -a --allow-empty-message -m 'Push build branch'
+        git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
+        git push --force origin jupyterbook 
+       
+    - name: Push build branch gh-pages 
+      run: |       
+        git checkout -b gh-pages
+        rm -rf *
+        mv /tmp/_site/* .
+        git add --all --force .
+        git commit -a --allow-empty-message -m 'Push gh-pages branch'
+        git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
+        git push --force origin gh-pages 

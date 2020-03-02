@@ -27,6 +27,7 @@ jobs:
         ls -ls
         # jupyter-book build .
         jupyter-book create --content-folder content --config _config.yml --overwrite buildbook
+        rm -r content
             
         rm -rf ./buildbook/_site/*
         rm -rf ./buildbook/_bibliography/*

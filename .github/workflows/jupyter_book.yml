@@ -4,6 +4,11 @@ on:
   push:
     branches: master
 
+# The intended workflow is:
+# - spot a checkin to master
+# - use that content to generate a book build in jupyterbook branch
+# - copy the built site to gh-pages branch
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -65,7 +70,10 @@ jobs:
         git commit -a --allow-empty-message -m 'Push build branch'
         git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
         git push --force origin jupyterbook 
-       
+   
+    # What I had wanted to do was to create another action that would respond to a push on the
+    # jupyterbook branch, check that out and then push the site from that branch to gh-pages
+    # But for some reason, I couldn't get it to trigger?
     - name: Push build branch gh-pages 
       run: |       
         git checkout -b gh-pages

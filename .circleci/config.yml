@@ -29,7 +29,7 @@ jobs:
           name: Push site to gh-pages
           command: |
             export PATH=$PATH:/home/circleci/.local/bin
-            ghp-import -p -n -f -r https://${GITHUB_PERSONAL_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git _site
+            ghp-import -p -n -f -m 'auto commit gh-pages pages [ci skip]' -r https://${GITHUB_PERSONAL_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git _site
   fetch_and_commit:
     docker:
       - image: circleci/python:3.6.4

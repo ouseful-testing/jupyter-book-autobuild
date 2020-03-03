@@ -75,15 +75,20 @@ jobs:
         git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
         git push --force origin jupyterbook 
    
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./_site # If a page is deleted, is it removed from _site?
     # What I had wanted to do was to create another action that would respond to a push on the
     # jupyterbook branch, check that out and then push the site from that branch to gh-pages
     # But for some reason, I couldn't get it to trigger?
-    - name: Push build branch gh-pages 
-      run: |       
-        git checkout -b gh-pages
-        rm -rf *
-        mv /tmp/_site/* .
-        git add --all --force .
-        git commit -a --allow-empty-message -m 'Push gh-pages branch'
-        git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
-        git push --force origin gh-pages 
+    #- name: Push build branch gh-pages 
+    #  run: |       
+    #    git checkout -b gh-pages
+    #    rm -rf *
+    #    mv /tmp/_site/* .
+    #    git add --all --force .
+    #    git commit -a --allow-empty-message -m 'Push gh-pages branch'
+    #    git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
+    #    git push --force origin gh-pages 

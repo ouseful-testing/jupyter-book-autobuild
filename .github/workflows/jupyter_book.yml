@@ -79,7 +79,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./_site # If a page is deleted, is it removed from _site?
+        publish_dir: ./buildbook/_site # If a page is deleted, is it removed from _site?
     # What I had wanted to do was to create another action that would respond to a push on the
     # jupyterbook branch, check that out and then push the site from that branch to gh-pages
     # But for some reason, I couldn't get it to trigger?

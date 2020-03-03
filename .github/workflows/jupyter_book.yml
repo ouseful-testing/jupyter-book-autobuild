@@ -26,69 +26,52 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get install python3-pip
-    - name: Build Jupyter Book 
+    - name: Install Jupyter Book 
       run: |
         pip install jupyter-book
-        PATH="${PATH}:${HOME}/.local/bin"
-        ls -ls
+        #PATH="${PATH}:${HOME}/.local/bin"
+        #ls -ls
         # jupyter-book build .
-        jupyter-book create --content-folder content --config _config.yml --overwrite buildbook
-        rm -r content
-            
-        rm -rf ./buildbook/_site/*
-        rm -rf ./buildbook/_bibliography/*
-        #If a table of contents file exists, use it
-        if [ -f "toc.yml" ]
-          then
-            cp toc.yml buildbook/_data
-          else
-            jupyter-book toc buildbook
-        fi
+    - name: Set up and build Jupyter book
+      run: |
+        sudo chown -R $(whoami):$(whoami) .
+        
+        ( test -f toc.yml && echo "TOC exists") || jupyter-book toc . --path-output toc.yml 
+        
+        git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+        git config --global user.name "$GITHUB_ACTOR"
+        git checkout -b jupyterbook
+
+        (test -d buildbook && echo "Book dir (buildbook) already created") || jupyter-book create buildbook --content-folder content --config _config.yml --toc toc.yml --overwrite 
+
         
         #Perhaps provide a config setting to allow execution or not?
         jupyter-book build --execute --overwrite buildbook
  
-    # This doesn't work properly - surely we can just update site pages that have changed?
-    # Note that we'd also need to ensure we delete pages that no lnoger exist: how does jekyll do that?
-    - name: Jupyter Buildbook
-      run: |
-        sudo chown -R $(whoami):$(whoami) .
-        git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
-        git config --global user.name "$GITHUB_ACTOR"
-        git checkout -b jupyterbook
-        #cp -r _site /tmp
-        #rm -rf *
-        #mv /tmp/_site/* .
-    - name: Install Ruby dependencies	
+    - name: Install Jekyll and buid book
       run: |	
         cd buildbook 
         sudo gem install bundler -v 1.17.2	
-        bundle install	
-        bundle exec jekyll build
-        cp -r _site /tmp
+        bundle install
         
+        bundle exec jekyll build
+
     - name: Push build branch	jupyterbook
       run: |       
-        #git checkout -b jupyterbook
         git add --all --force buildbook
         git commit -a --allow-empty-message -m 'Push build branch'
-        git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
-        git push --force origin jupyterbook 
-   
+        #git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
+        #git push --force origin jupyterbook 
+ 
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: jupyterbook
+        force: true
+
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./buildbook/_site # If a page is deleted, is it removed from _site?
-    # What I had wanted to do was to create another action that would respond to a push on the
-    # jupyterbook branch, check that out and then push the site from that branch to gh-pages
-    # But for some reason, I couldn't get it to trigger?
-    #- name: Push build branch gh-pages 
-    #  run: |       
-    #    git checkout -b gh-pages
-    #    rm -rf *
-    #    mv /tmp/_site/* .
-    #    git add --all --force .
-    #    git commit -a --allow-empty-message -m 'Push gh-pages branch'
-    #    git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
-    #    git push --force origin gh-pages 

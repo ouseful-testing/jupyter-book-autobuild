@@ -29,9 +29,6 @@ jobs:
     - name: Install Jupyter Book 
       run: |
         pip install jupyter-book
-        #PATH="${PATH}:${HOME}/.local/bin"
-        #ls -ls
-        # jupyter-book build .
     - name: Set up and build Jupyter book
       run: |
         sudo chown -R $(whoami):$(whoami) .
@@ -44,11 +41,10 @@ jobs:
 
         (test -d buildbook && echo "Book dir (buildbook) already created") || jupyter-book create buildbook --content-folder content --config _config.yml --toc toc.yml --overwrite 
 
-        
         #Perhaps provide a config setting to allow execution or not?
         jupyter-book build --execute --overwrite buildbook
  
-    - name: Install Jekyll and buid book
+    - name: Install Jekyll and build book
       run: |	
         cd buildbook 
         sudo gem install bundler -v 1.17.2	
@@ -60,8 +56,6 @@ jobs:
       run: |       
         git add --all --force buildbook
         git commit -a --allow-empty-message -m 'Push build branch'
-        #git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
-        #git push --force origin jupyterbook 
  
     - name: Push changes
       uses: ad-m/github-push-action@master

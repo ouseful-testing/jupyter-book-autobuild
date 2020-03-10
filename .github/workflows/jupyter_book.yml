@@ -18,7 +18,6 @@ jobs:
         python-version: [3.7]
 
     steps:
-    - name: Copy Repository Contents
     - uses: actions/checkout@v2
     - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/master:refs/remotes/origin/master +refs/heads/jupyterbook:refs/remotes/origin/jupyterbook
     - name: Set up Python ${{ matrix.python-version }}

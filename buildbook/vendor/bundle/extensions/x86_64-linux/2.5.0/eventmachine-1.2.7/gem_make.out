@@ -1,0 +1,18 @@
+current directory: /home/runner/work/jupyter-book-autobuild/jupyter-book-autobuild/buildbook/vendor/bundle/gems/eventmachine-1.2.7/ext/fastfilereader
+/usr/bin/ruby2.5 -I /usr/local/lib/site_ruby/2.5.0 -r ./siteconf20200312-3572-nhk5k3.rb extconf.rb
+/usr/lib/ruby/vendor_ruby/rubygems/defaults/operating_system.rb:10: warning: constant Gem::ConfigMap is deprecated
+/usr/lib/ruby/vendor_ruby/rubygems/defaults/operating_system.rb:10: warning: constant Gem::ConfigMap is deprecated
+creating Makefile
+
+current directory: /home/runner/work/jupyter-book-autobuild/jupyter-book-autobuild/buildbook/vendor/bundle/gems/eventmachine-1.2.7/ext/fastfilereader
+make "DESTDIR=" clean
+
+current directory: /home/runner/work/jupyter-book-autobuild/jupyter-book-autobuild/buildbook/vendor/bundle/gems/eventmachine-1.2.7/ext/fastfilereader
+make "DESTDIR="
+compiling mapper.cpp
+compiling rubymain.cpp
+linking shared-object fastfilereaderext.so
+
+current directory: /home/runner/work/jupyter-book-autobuild/jupyter-book-autobuild/buildbook/vendor/bundle/gems/eventmachine-1.2.7/ext/fastfilereader
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 fastfilereaderext.so ./.gem.20200312-3572-1g003j6

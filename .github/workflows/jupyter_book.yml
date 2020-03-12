@@ -1,5 +1,6 @@
 name: Jupyter Book Publish
-# via https://github.com/atrisovic/weather-panel.github.io/blob/master/.github/workflows/pythonpackage.yml#L10
+# ish via https://github.com/atrisovic/weather-panel.github.io/blob/master/.github/workflows/pythonpackage.yml#L10
+# Relies on the presence of a jupyterbook branch, as set up in the setup.yml workflow
 on:
   push:
     branches:

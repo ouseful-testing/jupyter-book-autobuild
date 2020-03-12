@@ -1,0 +1,19 @@
+name: Repo Setup
+# Based on: https://github.com/fastai/fastpages/blob/master/.github/workflows/setup.yaml
+on: push
+
+jobs:
+  setup:
+    if: (github.event.commits[0].message == 'Initial commit') && (github.run_number == 1)
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Copy Repository Contents
+      uses: actions/checkout@v2
+
+    - name: setup jupyterbook branch
+      uses: peterjgrainger/action-create-branch@v1.0.0
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        branch: jupyterbook
